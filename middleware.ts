@@ -31,20 +31,6 @@ export async function middleware(request: NextRequest) {
       return NextResponse.redirect(new URL("/unauthorized", request.url));
     }
 
-    if (
-      (pathname.startsWith("/") || pathname.startsWith("/register")) &&
-      role === "ADMIN"
-    ) {
-      return NextResponse.redirect(new URL("/dashboard/admin", request.url));
-    }
-
-    if (
-      (pathname.startsWith("/") || pathname.startsWith("/register")) &&
-      role === "USER"
-    ) {
-      return NextResponse.redirect(new URL("/dashboard/user", request.url));
-    }
-
     return NextResponse.next();
   } catch (error) {
     return NextResponse.redirect(new URL("/", request.url));
