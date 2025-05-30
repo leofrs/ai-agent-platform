@@ -1,16 +1,14 @@
 import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
+  CommandDialog,
   CommandInput,
   CommandItem,
   CommandList,
 } from "@/components/ui/command";
-import { X } from "lucide-react";
+import { Dispatch, SetStateAction } from "react";
 
-interface IDialogSearchProps {
+export interface IDialogSearchProps {
   isOpen: boolean;
-  setIsOpen: (isOpen: boolean) => void;
+  setIsOpen: Dispatch<SetStateAction<boolean>>;
 }
 
 export function DialogSearch(props: IDialogSearchProps) {
@@ -18,28 +16,13 @@ export function DialogSearch(props: IDialogSearchProps) {
   return (
     <>
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-800/50 backdrop-blur-sm">
-          <div className="bg-white p-6 rounded-2xl shadow-lg max-w-md w-full relative">
-            <Command>
-              <div className="flex gap-2 items-center justify-between">
-                <CommandInput placeholder="Type a command or search..." />
+        <CommandDialog open={isOpen} onOpenChange={setIsOpen}>
+          <CommandInput placeholder="Encontre o agente adequado..." />
 
-                <X
-                  size="20"
-                  onClick={() => {
-                    setIsOpen(!isOpen);
-                  }}
-                />
-              </div>
-              <CommandList>
-                <CommandEmpty>No results found.</CommandEmpty>
-                <CommandGroup heading="Suggestions">
-                  <CommandItem>AI-model X</CommandItem>
-                </CommandGroup>
-              </CommandList>
-            </Command>
-          </div>
-        </div>
+          <CommandList>
+            <CommandItem>Test</CommandItem>
+          </CommandList>
+        </CommandDialog>
       )}
     </>
   );

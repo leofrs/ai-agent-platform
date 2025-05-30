@@ -1,5 +1,5 @@
 "use client";
-import { AuthContext } from "./AuthContext";
+import { AuthContext } from "./auth-context";
 import { ReactNode } from "react";
 
 type Props = {

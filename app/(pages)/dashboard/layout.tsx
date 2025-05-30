@@ -1,4 +1,4 @@
-import { AuthProvider } from "@/context/AuthProvider";
+import { AuthProvider } from "@/context/auth-provider";
 import Dashboard from "./page";
 import { getUserFromToken } from "@/lib/jwt";
 
