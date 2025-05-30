@@ -7,11 +7,12 @@ import { toast } from "sonner";
 import { LoaderCircle, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { NewAgent } from "@/components/new-agent";
+import { TableAgents } from "@/components/table-agents";
 
 export default function AgentsUserPage() {
   const { isOpen, setIsOpen } = useDialog();
   const [isOpenNewAgent, setIsOpenNewAgent] = useState<boolean>(false);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [agents, setAgents] = useState<IAgents[]>([]);
 
   const fetchAgents = async () => {
@@ -30,7 +31,6 @@ export default function AgentsUserPage() {
         });
         return;
       }
-
       setAgents(resData);
     } catch (error) {
       console.error("Error fetching agents:", error);
@@ -80,13 +80,21 @@ export default function AgentsUserPage() {
       </div>
 
       {agents.length > 0 ? (
-        <ul className="text-black">
-          {agents.map((agent) => (
-            <li key={agent.id}>Name of agente: {agent.name}</li>
-          ))}
-        </ul>
+        <TableAgents agents={agents} />
       ) : (
-        <p>No agents found.</p>
+        <div className="flex justify-center items-center h-[calc(100vh-200px)] text-gray-800 font-sans">
+          <div className="flex flex-col gap-1">
+            <h1 className="mb-2 text-xl font-semibold text-center">
+              Crie o seu primeiro agente
+            </h1>
+
+            <p className="text-sm text-gray-600 text-center max-w-md">
+              Crie um agente para monitorar, resumir e lhe instruir com detalhes
+              importantes. Em cada reunião você pode escolher o agente que
+              desejar.
+            </p>
+          </div>
+        </div>
       )}
     </main>
   );
