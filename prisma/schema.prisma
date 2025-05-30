@@ -14,9 +14,22 @@ model User {
   email String  @unique
   password String
   userRole UserRole @default(USER)
+
+  agents Agents[]
 }
 
 enum UserRole {
   USER
   ADMIN
+}
+
+model Agents {
+  id    String     @id @default(nanoid()) @db.VarChar(11)
+  name  String
+  instructions String
+  created_at DateTime @default(now()) @db.Timestamptz(6)
+  updated_at DateTime @updatedAt @db.Timestamptz(6)
+  user_id String @db.Uuid
+
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
 }
