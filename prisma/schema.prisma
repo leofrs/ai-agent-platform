@@ -16,6 +16,7 @@ model User {
   userRole UserRole @default(USER)
 
   agents Agents[]
+  meetings Meetings[]
 }
 
 enum UserRole {
@@ -28,8 +29,39 @@ model Agents {
   name  String
   instructions String
   created_at DateTime @default(now()) @db.Timestamptz(6)
-  updated_at DateTime @updatedAt @db.Timestamptz(6)
+  updated_at DateTime  @default(now()) @updatedAt @db.Timestamptz(6)
   user_id String @db.Uuid
 
   user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  meetings Meetings[]
+}
+
+model Meetings {
+  id    String     @id @default(nanoid()) @db.VarChar(11)
+  name  String
+  status MeetingsStatus @default(AGENDADO)
+  transcript_url String?
+  record_url String?
+  summary String?
+
+  started_at DateTime? @db.Timestamptz(6)
+  ended_at DateTime? @db.Timestamptz(6)
+
+  created_at DateTime @default(now()) @db.Timestamptz(6)
+  updated_at DateTime  @default(now()) @updatedAt @db.Timestamptz(6)
+
+  user_id String @db.Uuid
+  agent_id String @default(nanoid()) @db.VarChar(11)
+
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  agent Agents @relation(fields: [agent_id], references: [id], onDelete: Cascade)
+}
+
+enum MeetingsStatus {
+  PENDENTE
+  CANCELADO
+  CONCLUIDO
+  EM_ANDAMENTO
+  AGENDADO
 }
