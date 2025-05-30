@@ -1,33 +1,39 @@
 "use client";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { registerSchema } from "@/lib/zod-schemas/register-form-schema";
+import { agentFormSchema } from "@/lib/zod-schemas/agent-form-schema";
 import * as zod from "zod";
 import Link from "next/link";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { Eye, EyeOff, LoaderCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
-type FormData = zod.infer<typeof registerSchema>;
+type FormData = zod.infer<typeof agentFormSchema>;
 
-export const RegisterForm = () => {
+interface INewAgentFormProps {
+  isOpen: boolean;
+  setIsOpen: Dispatch<SetStateAction<boolean>>;
+}
+
+export const NewAgentForm = (props: INewAgentFormProps) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm({
-    resolver: zodResolver(registerSchema),
+    resolver: zodResolver(agentFormSchema),
   });
 
   const router = useRouter();
 
-  const [showPassword, setShowPassword] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const { isOpen, setIsOpen } = props;
 
   const onSubmit = async (data: FormData) => {
     setIsLoading(true);
-    const { name, email, password } = data;
+    /* const { name, email, password } = data;
 
     try {
       const res = await fetch("/api/register", {
@@ -70,11 +76,15 @@ export const RegisterForm = () => {
         },
       });
       return;
-    }
+    } */
+  };
+
+  const closeModal = () => {
+    setIsOpen(!isOpen);
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="p-6 space-y-6">
+    <form onSubmit={handleSubmit(onSubmit)} className=" space-y-6">
       <div className="space-y-2">
         <label
           htmlFor="name"
@@ -94,49 +104,19 @@ export const RegisterForm = () => {
 
       <div className="space-y-2">
         <label
-          htmlFor="email"
+          htmlFor="name"
           className="text-sm font-medium text-gray-700 block"
         >
-          Email
+          Instructions
         </label>
-        <input
-          {...register("email")}
-          placeholder="seu@email.com"
-          type="email"
+        <textarea
+          {...register("instructions")}
+          placeholder="Você é um agente de inteligência artificial que ajuda os usuários a encontrar o melhor lugar para viajar."
           className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition duration-200"
         />
-        {errors.email?.message && (
-          <p className="text-red-500 text-sm mt-1">{errors.email?.message}</p>
-        )}
-      </div>
-
-      <div className="space-y-2">
-        <label
-          htmlFor="password"
-          className="text-sm font-medium text-gray-700 block"
-        >
-          Senha
-        </label>
-
-        <div className="relative">
-          <input
-            {...register("password")}
-            type={showPassword ? "text" : "password"}
-            placeholder="********"
-            className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition duration-200"
-          />
-          <button
-            type="button"
-            onClick={() => setShowPassword(!showPassword)}
-            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none"
-          >
-            {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-          </button>
-        </div>
-
-        {errors.password?.message && (
+        {errors.instructions?.message && (
           <p className="text-red-500 text-sm mt-1">
-            {errors.password?.message}
+            {errors.instructions?.message}
           </p>
         )}
       </div>
@@ -152,15 +132,13 @@ export const RegisterForm = () => {
         )}
       </button>
 
-      <div className="text-center text-sm text-gray-500 mt-4">
-        Já tem uma conta?{" "}
-        <Link
-          href="/"
-          className="text-blue-600 hover:text-blue-800 font-medium"
-        >
-          Entrar
-        </Link>
-      </div>
+      <button
+        type="button"
+        onClick={closeModal}
+        className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-3 px-6 rounded-lg font-medium hover:from-blue-700 hover:to-indigo-700 transition duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 cursor-pointer flex items-center justify-center"
+      >
+        Cancelar
+      </button>
     </form>
   );
 };

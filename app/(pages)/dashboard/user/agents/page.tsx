@@ -4,10 +4,13 @@ import { useDialog } from "@/context/dialog-context";
 import { IAgents } from "@/db/agents-prisma";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { LoaderCircle } from "lucide-react";
+import { LoaderCircle, Plus } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { NewAgent } from "@/components/new-agent";
 
 export default function AgentsUserPage() {
   const { isOpen, setIsOpen } = useDialog();
+  const [isOpenNewAgent, setIsOpenNewAgent] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [agents, setAgents] = useState<IAgents[]>([]);
 
@@ -61,10 +64,20 @@ export default function AgentsUserPage() {
   }
 
   return (
-    <div>
+    <main className="bg-muted h-full p-4">
       <DialogSearch isOpen={isOpen} setIsOpen={setIsOpen} />
+      <NewAgent isOpen={isOpenNewAgent} setIsOpen={setIsOpenNewAgent} />
 
-      <h1>Agents User Page</h1>
+      <div className="w-full flex justify-between items-center mb-4">
+        <h1>Meus Agentes</h1>
+        <Button
+          className="flex gap-2 cursor-pointer"
+          onClick={() => setIsOpenNewAgent(!isOpenNewAgent)}
+        >
+          <Plus />
+          Novo Agente
+        </Button>
+      </div>
 
       {agents.length > 0 ? (
         <ul className="text-black">
@@ -75,6 +88,6 @@ export default function AgentsUserPage() {
       ) : (
         <p>No agents found.</p>
       )}
-    </div>
+    </main>
   );
 }

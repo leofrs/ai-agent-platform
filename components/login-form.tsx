@@ -1,7 +1,7 @@
 "use client";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { loginSchema } from "@/lib/zod-schemas/login-schema";
+import { loginSchema } from "@/lib/zod-schemas/login-form-schema";
 import * as zod from "zod";
 import Link from "next/link";
 import { useState } from "react";
