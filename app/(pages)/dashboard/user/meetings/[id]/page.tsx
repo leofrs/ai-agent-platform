@@ -11,10 +11,13 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import Link from "next/link";
+import { useParams } from "next/navigation";
 import { useState } from "react";
 
-export default function MeetingsIdPage({ params }: { params: { id: string } }) {
+export default function MeetingsIdPage() {
   const [isTrue, setIsTrue] = useState<boolean>(false);
+  const paramsUrl = useParams(); // <-- pega os params dinamicamente
 
   return (
     <main
@@ -108,18 +111,26 @@ export default function MeetingsIdPage({ params }: { params: { id: string } }) {
           </Tabs>
         </div>
       ) : (
-        <div className="flex w-full  flex-col gap-3 my-8 items-center justify-center">
-          <h2 className="text-2xl font-semibold">
-            Reunião ainda não foi iniciada
-          </h2>
-          <p className="text-sm font-light">
-            Uma vez iniciada, o resumo vai aparecer aqui
-          </p>
-        </div>
+        <>
+          <div className="flex w-full  flex-col gap-3 my-8 items-center justify-center">
+            <h2 className="text-2xl font-semibold">
+              Reunião ainda não foi iniciada
+            </h2>
+            <p className="text-sm font-light">
+              Uma vez iniciada, o resumo vai aparecer aqui
+            </p>
+          </div>
+        </>
       )}
 
       <div className="w-full flex gap-2 items-center justify-center">
-        <Button className="cursor-pointer">Iniciar reunião</Button>
+        <Link
+          href="/call"
+          target="_blank"
+          className="cursor-pointer bg-green-700 text-white px-4 py-2 rounded-md"
+        >
+          Iniciar reunião
+        </Link>
         <Button variant="destructive" className="cursor-pointer">
           Cancelar reunião
         </Button>

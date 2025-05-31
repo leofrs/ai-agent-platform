@@ -1,6 +1,9 @@
+"use client";
 import { IAgents } from "@/db/agents-prisma";
 import { Bot } from "lucide-react";
 import Link from "next/link";
+import { useParams } from "next/navigation";
+import { useEffect, useState } from "react";
 
 async function getAgentById(id: string): Promise<IAgents | null> {
   const agents: IAgents[] = [
@@ -10,16 +13,17 @@ async function getAgentById(id: string): Promise<IAgents | null> {
   return agents.find((agent) => agent.id === id) ?? null;
 }
 
-interface PageProps {
-  params: {
-    id: string;
-  };
-}
+export default async function AgentsIdPage() {
+  const { id } = useParams();
+  const [agent, setAgent] = useState<IAgents | null>(null);
 
-export default async function AgentsIdPage({ params }: PageProps) {
-  const agent = await getAgentById(params.id);
+  useEffect(() => {
+    if (typeof id === "string") {
+      getAgentById(id).then(setAgent);
+    }
+  }, [id]);
 
-  if (!agent) return "not found";
+  if (!agent) return <p>not found</p>;
   return (
     <main className="p-4 flex flex-col gap-4 bg-muted h-full">
       <Link href="/dashboard/user/agents">{"<--"} Voltar</Link>
